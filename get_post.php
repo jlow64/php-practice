@@ -6,20 +6,31 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="index.php" method="post">
-        <label>quantity: </label><br>
-        <input type="number" name="quantity">
-        <input type="submit" value="total">
-    </form>
 </body>
 </html>
 <?php
-    $item = "udon";
-    $price = 4.99;
-    $quantity = $_POST["quantity"];
-    $total = null;
+    $api_url = "https://github.com/jlow64";
 
-    $total = $quantity * $price;
-    echo "You have ordered: {$quantity} x {$item}/s <br>";
-    echo "Your total is: \${$total}"
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $api_url); // Applying url 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Enable option to return response as string
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Time out in 30 sec
+
+    $response = curl_exec($ch);
+
+    // Error handling
+    if(curl_errno($ch)) {
+        // If there is an error, handle it
+        $error_message = curl_error($ch);
+        // Handle error
+        die("Error occured: {$error_message}");
+    }
+
+    // Close curl session
+    curl_close($ch);
+
+    // print response 
+    echo $response;
+    
 ?>
